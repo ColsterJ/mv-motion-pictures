@@ -82,14 +82,10 @@ GO
 IF NOT EXISTS (SELECT name FROM sys.filegroups WHERE is_default=1 AND name = N'PRIMARY') ALTER DATABASE [motionpicturesdb] MODIFY FILEGROUP [PRIMARY] DEFAULT
 GO
 
-CREATE TABLE [dbo].[MotionPictures](
-	[ID] [int] NOT NULL,
+CREATE TABLE [dbo].[MotionPicture](
+	[ID] [int] NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	[Name] [nvarchar](50) NOT NULL,
 	[Description] [nvarchar](500) NULL,
-	[Release Year] [int] NOT NULL,
- CONSTRAINT [PK_MotionPictures] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+	[ReleaseYear] [int] NOT NULL,
 ) ON [PRIMARY]
 GO
