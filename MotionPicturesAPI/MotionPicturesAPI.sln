@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionPicturesAPI", "MotionPicturesAPI\MotionPicturesAPI.csproj", "{8CB1F734-F377-412F-BE82-189CEA0758AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8CB1F734-F377-412F-BE82-189CEA0758AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CB1F734-F377-412F-BE82-189CEA0758AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CB1F734-F377-412F-BE82-189CEA0758AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CB1F734-F377-412F-BE82-189CEA0758AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5C513A27-0011-414B-BC8F-702AEA3C887C}
+	EndGlobalSection
+EndGlobal
