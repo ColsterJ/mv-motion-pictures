@@ -3,13 +3,22 @@ using Microsoft.Extensions.DependencyInjection;
 using MotionPicturesAPI.Data;
 using MotionPicturesAPI.Models;
 
+var LocalTestingPermissiveCORS = "_localTestingPermissiveCORS";
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MotionPicturesAPIContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MotionPicturesAPIContext") ?? throw new InvalidOperationException("Connection string 'MotionPicturesAPIContext' not found.")));
-//builder.Services.AddDbContext<MotionPicturesAPIContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("MotionPicturesAPIContext") ?? throw new InvalidOperationException("Connection string 'MotionPicturesAPIContext' not found.")));
 
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(LocalTestingPermissiveCORS,
+                          policy =>
+                          {
+                              policy.AllowAnyOrigin()
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod();
+                          });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -26,6 +35,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors(LocalTestingPermissiveCORS);
+}
 
 app.UseAuthorization();
 
