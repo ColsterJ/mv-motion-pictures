@@ -12,10 +12,37 @@ const formMode = ref('add');
 
 watchEffect(async () => {
   if (refreshData.value === true) {
-    currentList.value = await (await fetch(API_URL)).json()
-    refreshData.value = false;
+    await api_getAll();
   }
 })
+
+async function api_getAll() {
+  currentList.value = await (await fetch(API_URL)).json()
+  refreshData.value = false;
+}
+async function api_post(payload) {
+  let response;
+  try {
+    response = await fetch(API_URL,
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (!response.ok) {
+      console.log("Server responded with an error");
+      return false;
+    }
+    else
+      return true;
+  }
+}
 
 function add() {
   formMode.value = 'add';
@@ -34,10 +61,18 @@ function deleteRecord(id) {
   console.log(`delete id ${id}!`);
 }
 
-function saveForm(payload, id=null) {
+async function saveForm(payload, id, successCallback) {
   console.log(payload);
   if (id) {
     console.log(`id to update is ${id}`)
+    // TODO: PUT if updating an existing record
+  } else {
+    const response_ok = await api_post(payload);
+    if (response_ok) {
+      console.log("Saved successfully!");
+      successCallback();
+      refreshData.value = true;
+    }
   }
 }
 
@@ -61,8 +96,9 @@ function saveForm(payload, id=null) {
       :class="{'hidden': !showForm}"
       :formMode="formMode"
       @close-form="showForm = false"
-      @save-form="(payload, id) => saveForm(payload, id)"
+      @save-form="(payload, id, successCallback) => saveForm(payload, id, successCallback)"
     />
+    <!-- :initialFormData="formMode === 'edit' || formMode === 'copy' ? currentList[activeRecordId] : null" -->
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 
-const props = defineProps(['data','formMode'])
+const props = defineProps(['data','formMode','initialFormData'])
 const emit = defineEmits(['close-form','save-form'])
 
 const name = ref('')
@@ -15,7 +15,7 @@ function save() {
     description: description.value,
     releaseYear: releaseYear.value
   }
-  emit('save-form', formData);
+  emit('save-form', formData, null, closeForm);
 }
 
 function closeForm() {
