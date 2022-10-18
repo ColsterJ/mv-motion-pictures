@@ -7,6 +7,7 @@ import { api_getAll, api_post } from './api.js';
 const refreshData = ref(true);
 const currentList = ref([]);
 
+const activeRecordIndex = ref(null);
 const showForm = ref(false);
 const formMode = ref('add');
 
@@ -16,29 +17,22 @@ watchEffect(async () => {
   }
 })
 
+function openForm(mode, editOrCopyIndex=null) {
+  if (mode !== 'add' && mode !== 'edit' && mode !== 'copy') {
+    console.log("Couldn't open form; not a valid mode!")
+    return;
+  }
+
+  formMode.value = mode;
+  showForm.value = true;
+  activeRecordIndex.value = editOrCopyIndex;
+}
+
 async function getAllRecords() {
   currentList.value = await api_getAll();
   refreshData.value = false;
 }
-
-function add() {
-  formMode.value = 'add';
-  showForm.value = true;
-  console.log(`add a movie!`);
-}
-function edit(id) {
-  formMode.value = 'edit';
-  console.log(`edit id ${id}!`);
-}
-function copy(id) {
-  formMode.value = 'copy';
-  console.log(`copy id ${id}!`);
-}
-function deleteRecord(id) {
-  console.log(`delete id ${id}!`);
-}
-
-async function saveForm(payload, id, successCallback) {
+async function saveForm(payload, id) {
   console.log(payload);
   if (id) {
     console.log(`id to update is ${id}`)
@@ -47,10 +41,13 @@ async function saveForm(payload, id, successCallback) {
     const response_ok = await api_post(payload);
     if (response_ok) {
       console.log("Saved successfully!");
-      successCallback();
+      showForm.value = false;
       refreshData.value = true;
     }
   }
+}
+function deleteRecord(index) {
+  console.log(`delete item at index ${index}!`);
 }
 
 </script>
@@ -63,19 +60,19 @@ async function saveForm(payload, id, successCallback) {
       :data="currentList"
       :class="{'hidden': showForm}"
 
-      @add="add()"
-      @edit="(id) => edit(id)"
-      @copy="(id) => copy(id)"
-      @delete-record="(id) => deleteRecord(id)"
+      @add="openForm('add')"
+      @edit="(index) => openForm('edit', index)"
+      @copy="(index) => openForm('copy', index)"
+      @delete-record="(index) => deleteRecord(index)"
     />
 
     <MotionPictureForm
       :class="{'hidden': !showForm}"
       :formMode="formMode"
+      :initialFormData="activeRecordIndex !== null ? currentList[activeRecordIndex] : null"
       @close-form="showForm = false"
       @save-form="(payload, id, successCallback) => saveForm(payload, id, successCallback)"
     />
-    <!-- :initialFormData="formMode === 'edit' || formMode === 'copy' ? currentList[activeRecordId] : null" -->
   </div>
 </template>
 

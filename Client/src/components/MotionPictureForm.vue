@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 
 const props = defineProps(['data','formMode','initialFormData'])
 const emit = defineEmits(['close-form','save-form'])
@@ -8,22 +8,31 @@ const name = ref('')
 const description = ref('')
 const releaseYear = ref(null)
 
+watchEffect(async () => {
+  if (props.initialFormData !== null) {
+    name.value = props.initialFormData.name;
+    description.value = props.initialFormData.description;
+    releaseYear.value = props.initialFormData.releaseYear;
+  } else {
+    name.value = '';
+    description.value = '';
+    releaseYear.value = '';
+  }
+})
+
 function save() {
   console.log("Save clicked")
+  // TODO:
+  // 1. Validate form data (HTML5 Validation?)
+  // 2. If we have an editId, use it instead of null for the save-form event
   const formData = {
     name: name.value,
     description: description.value,
     releaseYear: releaseYear.value
   }
-  emit('save-form', formData, null, closeForm);
+  emit('save-form', formData, null);
 }
 
-function closeForm() {
-  name.value = '';
-  description.value = '';
-  releaseYear.value = null;
-  emit('close-form');
-}
 </script>
 
 <template>
@@ -49,7 +58,7 @@ function closeForm() {
 
       <div class="form-group pt-4">
         <button type="button" class="btn btn-primary mr-2" @click="save()">Save</button>
-        <button type="button" class="btn btn-secondary" @click="closeForm()">Cancel</button>
+        <button type="button" class="btn btn-secondary" @click="$emit('close-form')">Cancel</button>
       </div>
     </form>
   </div>

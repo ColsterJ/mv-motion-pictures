@@ -1,6 +1,8 @@
 const API_URL = 'https://localhost:7126/api/MotionPictures';
 
 async function api_getAll() {
+  // TODO: 
+  // 1. Error handling (same overall as POST)
   return await (await fetch(API_URL)).json();
 }
 
@@ -27,5 +29,8 @@ async function api_post(payload) {
       return true;
   }
 }
+
+// TODO: PUT /id
+// TODO: DELETE /id
 
 export { api_getAll, api_post };

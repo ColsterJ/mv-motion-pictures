@@ -18,14 +18,14 @@ const emits = defineEmits(['add','edit','copy','delete-record'])
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in data">
+        <tr v-for="(item, index) in data">
           <td>{{ item.name }}</td>
           <td>{{ item.description }}</td>
           <td>{{ item.releaseYear }}</td>
           <td>
-            <span class="mp-icon-btn" @click="$emit('edit', item.id)">✏️</span>
-            <span class="mp-icon-btn" @click="$emit('copy', item.id)">📋</span>
-            <span class="mp-icon-btn" @click="$emit('delete-record', item.id)">🗑️</span>
+            <span class="mp-icon-btn" @click="$emit('edit', index)">✏️</span>
+            <span class="mp-icon-btn" @click="$emit('copy', index)">📋</span>
+            <span class="mp-icon-btn" @click="$emit('delete-record', index)">🗑️</span>
           </td>
         </tr>
       </tbody>
