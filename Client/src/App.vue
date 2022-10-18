@@ -34,6 +34,13 @@ function deleteRecord(id) {
   console.log(`delete id ${id}!`);
 }
 
+function saveForm(payload, id=null) {
+  console.log(payload);
+  if (id) {
+    console.log(`id to update is ${id}`)
+  }
+}
+
 </script>
 
 <template>
@@ -53,6 +60,8 @@ function deleteRecord(id) {
     <MotionPictureForm
       :class="{'hidden': !showForm}"
       :formMode="formMode"
+      @close-form="showForm = false"
+      @save-form="(payload, id) => saveForm(payload, id)"
     />
   </div>
 </template>
