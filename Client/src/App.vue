@@ -2,8 +2,8 @@
 import { ref, watchEffect } from "vue";
 import MotionPictureTable from './components/MotionPictureTable.vue';
 import MotionPictureForm from './components/MotionPictureForm.vue';
+import { api_getAll, api_post } from './api.js';
 
-const API_URL = 'https://localhost:7126/api/MotionPictures';
 const refreshData = ref(true);
 const currentList = ref([]);
 
@@ -12,36 +12,13 @@ const formMode = ref('add');
 
 watchEffect(async () => {
   if (refreshData.value === true) {
-    await api_getAll();
+    await getAllRecords();
   }
 })
 
-async function api_getAll() {
-  currentList.value = await (await fetch(API_URL)).json()
+async function getAllRecords() {
+  currentList.value = await api_getAll();
   refreshData.value = false;
-}
-async function api_post(payload) {
-  let response;
-  try {
-    response = await fetch(API_URL,
-    {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (!response.ok) {
-      console.log("Server responded with an error");
-      return false;
-    }
-    else
-      return true;
-  }
 }
 
 function add() {
