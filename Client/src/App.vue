@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watchEffect } from "vue";
+import MotionPictureTable from './components/MotionPictureTable.vue';
 
 const refreshData = ref(true);
 const API_URL = 'https://localhost:7126/api/MotionPictures';
@@ -39,34 +40,15 @@ function deleteRecord(id) {
   <div class="container">
     <h1>Motion Pictures</h1>
 
-    <div id="mp-table" :class="{'hidden': showForm}">
-      <div class="p-2 float-right">
-        <button type="button" class="btn btn-primary" @click="add()">+ Add</button>
-        <button type="button" class="btn btn-primary" @click="refreshData = true">Refresh</button>
-      </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Release Year</th>
-            <th style="min-width:  120px" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in currentList">
-            <td>{{ item.name }}</td>
-            <td>{{ item.description }}</td>
-            <td>{{ item.releaseYear }}</td>
-            <td>
-              <span class="mp-icon-btn" @click="edit(item.id)">✏️</span>
-              <span class="mp-icon-btn" @click="copy(item.id)">📋</span>
-              <span class="mp-icon-btn" @click="deleteRecord(item.id)">🗑️</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <MotionPictureTable
+      :data="currentList"
+      :class="{'hidden': showForm}"
+
+      @add="add()"
+      @edit="(id) => edit(id)"
+      @copy="(id) => copy(id)"
+      @delete-record="(id) => deleteRecord(id)"
+    />
 
     <div id="mp-edit-form" :class="{'hidden': !showForm}">
       <h2 v-if="formMode === 'add'">Add a new movie</h2>
@@ -93,9 +75,5 @@ function deleteRecord(id) {
 <style scoped>
   .hidden {
     display:  none;
-  }
-  .mp-icon-btn {
-    cursor: pointer;
-    user-select: none;
   }
 </style>
