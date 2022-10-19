@@ -2,7 +2,7 @@
 import { ref, watchEffect } from "vue";
 import MotionPictureTable from './components/MotionPictureTable.vue';
 import MotionPictureForm from './components/MotionPictureForm.vue';
-import { api_getAll, api_post, api_delete } from './api.js';
+import { api_getAll, api_post, api_put, api_delete } from './api.js';
 
 const refreshData = ref(true);
 const currentList = ref([]);
@@ -30,8 +30,12 @@ function openForm(mode, editOrCopyIndex=null) {
 
 async function saveForm(payload, id) {
   if (id) {
-    console.log(`id to update is ${id}`)
-    // TODO: PUT if updating an existing record
+    const response_ok = await api_put({...payload, id: id});
+    if (response_ok) {
+      console.log("Updated successfully!");
+      showForm.value = false;
+      refreshData.value = true;
+    }
   } else {
     const response_ok = await api_post(payload);
     if (response_ok) {
@@ -84,6 +88,7 @@ async function deleteRecord(index) {
       :class="{'hidden': !showForm}"
       :formMode="formMode"
       :initialFormData="activeRecordIndex !== null ? currentList[activeRecordIndex] : null"
+      :idToUpdate="formMode === 'edit' ? currentList[activeRecordIndex].id : null"
       @close-form="showForm = false"
       @save-form="(payload, id, successCallback) => saveForm(payload, id, successCallback)"
     />

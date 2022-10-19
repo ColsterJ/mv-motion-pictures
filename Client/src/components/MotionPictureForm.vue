@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watchEffect } from "vue";
 
-const props = defineProps(['data','formMode','initialFormData'])
+const props = defineProps(['data','formMode','initialFormData','idToUpdate'])
 const emit = defineEmits(['close-form','save-form'])
 
 const name = ref('')
@@ -30,7 +30,7 @@ function save() {
     description: description.value,
     releaseYear: releaseYear.value
   }
-  emit('save-form', formData, null);
+  emit('save-form', formData, props.idToUpdate);
 }
 
 </script>
