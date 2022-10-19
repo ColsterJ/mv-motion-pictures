@@ -2,14 +2,14 @@
 import { ref, watchEffect } from "vue";
 import MotionPictureTable from './components/MotionPictureTable.vue';
 import MotionPictureForm from './components/MotionPictureForm.vue';
-import { api_getAll, api_post } from './api.js';
+import { api_getAll, api_post, api_delete } from './api.js';
 
 const refreshData = ref(true);
 const currentList = ref([]);
 
-const activeRecordIndex = ref(null);
 const showForm = ref(false);
 const formMode = ref('add');
+const activeRecordIndex = ref(null);
 
 watchEffect(async () => {
   if (refreshData.value === true) {
@@ -28,12 +28,7 @@ function openForm(mode, editOrCopyIndex=null) {
   activeRecordIndex.value = editOrCopyIndex;
 }
 
-async function getAllRecords() {
-  currentList.value = await api_getAll();
-  refreshData.value = false;
-}
 async function saveForm(payload, id) {
-  console.log(payload);
   if (id) {
     console.log(`id to update is ${id}`)
     // TODO: PUT if updating an existing record
@@ -46,8 +41,27 @@ async function saveForm(payload, id) {
     }
   }
 }
-function deleteRecord(index) {
-  console.log(`delete item at index ${index}!`);
+
+async function getAllRecords() {
+  currentList.value = await api_getAll();
+  refreshData.value = false;
+}
+
+async function deleteRecord(index) {
+  let record;
+  if (currentList.value[index] === undefined) {
+    console.log("Could not find record to delete!")
+    return;
+  } else {
+    record = currentList.value[index];
+  }
+
+  const response_ok = await api_delete(record.id);
+  if (response_ok) {
+    console.log("Deleted successfully!");
+    showForm.value = false;
+    refreshData.value = true;
+  }
 }
 
 </script>

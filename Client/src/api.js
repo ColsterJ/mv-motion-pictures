@@ -32,5 +32,20 @@ async function api_post(payload) {
 
 // TODO: PUT /id
 // TODO: DELETE /id
+async function api_delete(id) {
+  let response;
+  try {
+    response = await fetch(API_URL + `/${id}`, {method: 'DELETE'});
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (!response.ok) {
+      console.log("Server responded with an error");
+      return false;
+    }
+    else
+      return true;
+  }
+}
 
-export { api_getAll, api_post };
+export { api_getAll, api_post, api_delete };
