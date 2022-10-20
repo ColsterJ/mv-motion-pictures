@@ -90,7 +90,7 @@ function closeForm() {
       </div>
 
       <div class="form-group pt-4">
-        <button type="submit" class="btn btn-primary mr-2" @click="save()" @submit="save()">Save</button>
+        <button type="button" class="btn btn-primary mr-2" @click="save()">Save</button>
         <button type="button" class="btn btn-secondary" @click="closeForm()">Cancel</button>
         
         <button v-if="formMode === 'edit'" type="button" class="btn btn-danger float-right" @click="$emit('delete-record')">Delete</button>
