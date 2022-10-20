@@ -64,6 +64,7 @@ async function deleteRecord(index) {
   if (response_ok) {
     console.log("Deleted successfully!");
     showForm.value = false;
+    activeRecordIndex.value = null;
     refreshData.value = true;
   }
 }
@@ -88,9 +89,10 @@ async function deleteRecord(index) {
       :class="{'hidden': !showForm}"
       :formMode="formMode"
       :initialFormData="activeRecordIndex !== null ? currentList[activeRecordIndex] : null"
-      :idToUpdate="formMode === 'edit' ? currentList[activeRecordIndex].id : null"
+      :idToUpdate="formMode === 'edit' && currentList[activeRecordIndex] ? currentList[activeRecordIndex].id : null"
       @close-form="showForm = false"
       @save-form="(payload, id, successCallback) => saveForm(payload, id, successCallback)"
+      @delete-record="deleteRecord(activeRecordIndex)"
     />
   </div>
 </template>

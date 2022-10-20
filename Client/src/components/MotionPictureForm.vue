@@ -2,7 +2,7 @@
 import { ref, watchEffect } from "vue";
 
 const props = defineProps(['data','formMode','initialFormData','idToUpdate'])
-const emit = defineEmits(['close-form','save-form'])
+const emit = defineEmits(['close-form','save-form','delete-record'])
 
 const name = ref('')
 const description = ref('')
@@ -92,6 +92,8 @@ function closeForm() {
       <div class="form-group pt-4">
         <button type="submit" class="btn btn-primary mr-2" @click="save()" @submit="save()">Save</button>
         <button type="button" class="btn btn-secondary" @click="closeForm()">Cancel</button>
+        
+        <button v-if="formMode === 'edit'" type="button" class="btn btn-danger float-right" @click="$emit('delete-record')">Delete</button>
       </div>
     </form>
   </div>
