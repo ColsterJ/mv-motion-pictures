@@ -66,11 +66,6 @@ function closeForm() {
     <h2 v-if="formMode === 'edit'">Edit a movie</h2>
     <h2 v-if="formMode === 'copy'">Copy a movie</h2>
 
-    <div v-if="formErrorList.length > 0">
-      Please address the following errors:
-      <p v-for="formError in formErrorList">* {{formError}}</p>
-    </div>
-
     <form ref="formElement" :class="{'attempted-submit': attemptedToSubmit}">
       <div class="form-group">
         <label for="nameControl">Name *</label>
@@ -85,6 +80,13 @@ function closeForm() {
       <div class="form-group">
         <label for="releaseYearControl">Release Year *</label>
         <input required maxlength="4" pattern="[0-9]{4}" v-model="releaseYear" type="text" class="form-control" id="releaseYearControl" placeholder="Enter release year" />
+      </div>
+
+      <div v-if="formErrorList.length > 0" class="alert alert-danger" role="alert">
+        <strong>Please address the following errors:</strong>
+        <ul v-if="formErrorList.length > 0">
+          <li v-for="formError in formErrorList">{{formError}}</li>
+        </ul>
       </div>
 
       <div class="form-group pt-4">
