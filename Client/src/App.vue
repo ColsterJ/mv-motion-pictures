@@ -1,25 +1,25 @@
 <script setup>
 import { ref, watchEffect } from "vue";
-import MotionPictureTable from './components/MotionPictureTable.vue';
-import MotionPictureForm from './components/MotionPictureForm.vue';
-import { api_getAll, api_post, api_put, api_delete } from './api.js';
+import MotionPictureTable from "./components/MotionPictureTable.vue";
+import MotionPictureForm from "./components/MotionPictureForm.vue";
+import { api_getAll, api_post, api_put, api_delete } from "./api.js";
 
 const refreshData = ref(true);
 const currentList = ref([]);
 
 const showForm = ref(false);
-const formMode = ref('add');
+const formMode = ref("add");
 const activeRecordIndex = ref(null);
 
 watchEffect(async () => {
   if (refreshData.value === true) {
     await getAllRecords();
   }
-})
+});
 
-function openForm(mode, editOrCopyIndex=null) {
-  if (mode !== 'add' && mode !== 'edit' && mode !== 'copy') {
-    console.log("Couldn't open form; not a valid mode!")
+function openForm(mode, editOrCopyIndex = null) {
+  if (mode !== "add" && mode !== "edit" && mode !== "copy") {
+    console.log("Couldn't open form; not a valid mode!");
     return;
   }
 
@@ -30,7 +30,7 @@ function openForm(mode, editOrCopyIndex=null) {
 
 async function saveForm(payload, id) {
   if (id) {
-    const response_ok = await api_put({...payload, id: id});
+    const response_ok = await api_put({ ...payload, id: id });
     if (response_ok) {
       console.log("Updated successfully!");
       showForm.value = false;
@@ -54,7 +54,7 @@ async function getAllRecords() {
 async function deleteRecord(index) {
   let record;
   if (currentList.value[index] === undefined) {
-    console.log("Could not find record to delete!")
+    console.log("Could not find record to delete!");
     return;
   } else {
     record = currentList.value[index];
@@ -68,7 +68,6 @@ async function deleteRecord(index) {
     refreshData.value = true;
   }
 }
-
 </script>
 
 <template>
@@ -77,8 +76,7 @@ async function deleteRecord(index) {
 
     <MotionPictureTable
       :data="currentList"
-      :class="{'hidden': showForm}"
-
+      :class="{ hidden: showForm }"
       @add="openForm('add')"
       @edit="(index) => openForm('edit', index)"
       @copy="(index) => openForm('copy', index)"
@@ -86,20 +84,28 @@ async function deleteRecord(index) {
     />
 
     <MotionPictureForm
-      :class="{'hidden': !showForm}"
+      :class="{ hidden: !showForm }"
       :formOpen="showForm"
       :formMode="formMode"
-      :initialFormData="activeRecordIndex !== null ? currentList[activeRecordIndex] : null"
-      :idToUpdate="formMode === 'edit' && currentList[activeRecordIndex] ? currentList[activeRecordIndex].id : null"
+      :initialFormData="
+        activeRecordIndex !== null ? currentList[activeRecordIndex] : null
+      "
+      :idToUpdate="
+        formMode === 'edit' && currentList[activeRecordIndex]
+          ? currentList[activeRecordIndex].id
+          : null
+      "
       @close-form="showForm = false"
-      @save-form="(payload, id, successCallback) => saveForm(payload, id, successCallback)"
+      @save-form="
+        (payload, id, successCallback) => saveForm(payload, id, successCallback)
+      "
       @delete-record="deleteRecord(activeRecordIndex)"
     />
   </div>
 </template>
 
 <style scoped>
-  .hidden {
-    display:  none;
-  }
+.hidden {
+  display: none;
+}
 </style>
