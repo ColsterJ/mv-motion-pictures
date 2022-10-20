@@ -67,9 +67,9 @@ function save() {
 
 <template>
   <div id="mp-edit-form">
-    <h2 v-if="formMode === 'add'">Add a new movie</h2>
-    <h2 v-if="formMode === 'edit'">Edit a movie</h2>
-    <h2 v-if="formMode === 'copy'">Copy a movie</h2>
+    <h2 class="form-heading" v-if="formMode === 'add'">Add a new movie</h2>
+    <h2 class="form-heading" v-if="formMode === 'edit'">Edit a movie</h2>
+    <h2 class="form-heading" v-if="formMode === 'copy'">Copy a movie</h2>
 
     <form ref="formElement" :class="{ 'attempted-submit': attemptedToSubmit }">
       <div class="form-group">
@@ -149,5 +149,9 @@ function save() {
 <style scoped>
 form.attempted-submit > div > input:invalid {
   border: 1px solid red;
+}
+
+.form-heading {
+  text-align:  center;
 }
 </style>
