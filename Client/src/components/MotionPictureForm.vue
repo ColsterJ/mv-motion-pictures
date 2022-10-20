@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watchEffect } from "vue";
 
-const props = defineProps(['data','formMode','initialFormData','idToUpdate'])
+const props = defineProps(['formOpen','formMode','initialFormData','idToUpdate'])
 const emit = defineEmits(['close-form','save-form','delete-record'])
 
 const name = ref('')
@@ -13,6 +13,13 @@ const attemptedToSubmit = ref(false);
 const formErrorList = ref([]);
 
 watchEffect(async () => {
+  if (props.formOpen !== true) {
+    return;
+  }
+
+  attemptedToSubmit.value = false;
+  formErrorList.value = [];
+
   if (props.initialFormData !== null) {
     name.value = props.initialFormData.name;
     description.value = props.initialFormData.description;
@@ -51,13 +58,6 @@ function save() {
   }
   emit('save-form', formData, props.idToUpdate);
 }
-
-function closeForm() {
-  attemptedToSubmit.value = false;
-  formErrorList.value = [];
-  emit('close-form');
-}
-
 </script>
 
 <template>
@@ -91,7 +91,7 @@ function closeForm() {
 
       <div class="form-group pt-4">
         <button type="button" class="btn btn-primary mr-2" @click="save()">Save</button>
-        <button type="button" class="btn btn-secondary" @click="closeForm()">Cancel</button>
+        <button type="button" class="btn btn-secondary" @click="$emit('close-form')">Cancel</button>
         
         <button v-if="formMode === 'edit'" type="button" class="btn btn-danger float-right" @click="$emit('delete-record')">Delete</button>
       </div>

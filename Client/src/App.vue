@@ -87,6 +87,7 @@ async function deleteRecord(index) {
 
     <MotionPictureForm
       :class="{'hidden': !showForm}"
+      :formOpen="showForm"
       :formMode="formMode"
       :initialFormData="activeRecordIndex !== null ? currentList[activeRecordIndex] : null"
       :idToUpdate="formMode === 'edit' && currentList[activeRecordIndex] ? currentList[activeRecordIndex].id : null"
