@@ -15,11 +15,22 @@ const activeRecordIndex = ref(null);
 const showDeleteConfirmation = ref(false);
 const recordToDelete = ref(null);
 
+const messageText = ref(null);
+const messageType = ref(null);
+
 watchEffect(async () => {
   if (refreshData.value === true) {
     await getAllRecords();
   }
 });
+
+watchEffect(() => {
+  if (showForm.value === true) {
+    // Reset the success and error messages when the form is opened
+    messageText.value = null;
+    messageType.value = null;
+  }
+})
 
 function openForm(mode, editOrCopyIndex = null) {
   if (mode !== "add" && mode !== "edit" && mode !== "copy") {
@@ -36,14 +47,16 @@ async function saveForm(payload, id) {
   if (id) {
     const response_ok = await api_put({ ...payload, id: id });
     if (response_ok) {
-      console.log("Updated successfully!");
+      messageText.value = `'${payload.name}' has been updated successfully.`;
+      messageType.value = 'success';
       showForm.value = false;
       refreshData.value = true;
     }
   } else {
     const response_ok = await api_post(payload);
     if (response_ok) {
-      console.log("Saved successfully!");
+      messageText.value = `'${payload.name}' has been saved successfully.`;
+      messageType.value = 'success';
       showForm.value = false;
       refreshData.value = true;
     }
@@ -69,10 +82,14 @@ async function tryDeleteRecord(index) {
 async function actuallyDeleteRecord(record) {
   const response_ok = await api_delete(record.id);
   if (response_ok) {
-    console.log("Deleted successfully!");
+    messageText.value = `'${record.name}' has been deleted successfully.`;
+    messageType.value = 'success';
     showForm.value = false;
     activeRecordIndex.value = null;
     refreshData.value = true;
+  } else {
+    messageText.value = `There was a problem deleting '${record.name}'. Please try again.`;
+    messageType.value = 'danger';
   }
   recordToDelete.value = null;
   showDeleteConfirmation.value = false;
@@ -82,6 +99,18 @@ async function actuallyDeleteRecord(record) {
 <template>
   <div class="container">
     <h1>Motion Pictures</h1>
+
+    <div
+      v-if="messageText"
+      :class="['alert',
+        {'alert-danger': messageType === 'danger'},
+        {'alert-success': messageType === 'success'}]"
+      role="alert"
+    >
+      {{ messageText }}
+    </div>
+
+    <!-- "[{ active: isActive }, errorClass]" -->
 
     <MotionPictureTable
       :data="motionPictureList"

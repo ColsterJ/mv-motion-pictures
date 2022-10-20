@@ -55,7 +55,7 @@ async function api_delete(id) {
   } catch (error) {
     console.log(error);
   } finally {
-    if (!response.ok) {
+    if (!response || !response.ok) {
       console.log("Server responded with an error");
       return false;
     } else return true;
