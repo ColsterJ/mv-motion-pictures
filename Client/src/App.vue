@@ -2,14 +2,18 @@
 import { ref, watchEffect } from "vue";
 import MotionPictureTable from "./components/MotionPictureTable.vue";
 import MotionPictureForm from "./components/MotionPictureForm.vue";
+import ConfirmDeleteDialog from "./components/ConfirmDeleteDialog.vue";
 import { api_getAll, api_post, api_put, api_delete } from "./api.js";
 
 const refreshData = ref(true);
-const currentList = ref([]);
+const motionPictureList = ref([]);
 
 const showForm = ref(false);
 const formMode = ref("add");
 const activeRecordIndex = ref(null);
+
+const showDeleteConfirmation = ref(false);
+const recordToDelete = ref(null);
 
 watchEffect(async () => {
   if (refreshData.value === true) {
@@ -47,19 +51,22 @@ async function saveForm(payload, id) {
 }
 
 async function getAllRecords() {
-  currentList.value = await api_getAll();
+  motionPictureList.value = await api_getAll();
   refreshData.value = false;
 }
 
-async function deleteRecord(index) {
+async function tryDeleteRecord(index) {
   let record;
-  if (currentList.value[index] === undefined) {
+  if (motionPictureList.value[index] === undefined) {
     console.log("Could not find record to delete!");
     return;
   } else {
-    record = currentList.value[index];
+    record = motionPictureList.value[index];
+    recordToDelete.value = record;
+    showDeleteConfirmation.value = true;
   }
-
+}
+async function actuallyDeleteRecord(record) {
   const response_ok = await api_delete(record.id);
   if (response_ok) {
     console.log("Deleted successfully!");
@@ -67,6 +74,8 @@ async function deleteRecord(index) {
     activeRecordIndex.value = null;
     refreshData.value = true;
   }
+  recordToDelete.value = null;
+  showDeleteConfirmation.value = false;
 }
 </script>
 
@@ -75,12 +84,20 @@ async function deleteRecord(index) {
     <h1>Motion Pictures</h1>
 
     <MotionPictureTable
-      :data="currentList"
+      :data="motionPictureList"
       :class="{ hidden: showForm }"
       @add="openForm('add')"
       @edit="(index) => openForm('edit', index)"
       @copy="(index) => openForm('copy', index)"
-      @delete-record="(index) => deleteRecord(index)"
+      @delete-record="(index) => tryDeleteRecord(index)"
+    />
+
+    <ConfirmDeleteDialog
+      v-if="showDeleteConfirmation"
+      :dialogOpen="showDeleteConfirmation"
+      :recordToDelete="recordToDelete"
+      @actually-delete-record="(record) => actuallyDeleteRecord(record)"
+      @cancel-delete="showDeleteConfirmation = false"
     />
 
     <MotionPictureForm
@@ -88,20 +105,21 @@ async function deleteRecord(index) {
       :formOpen="showForm"
       :formMode="formMode"
       :initialFormData="
-        activeRecordIndex !== null ? currentList[activeRecordIndex] : null
+        activeRecordIndex !== null ? motionPictureList[activeRecordIndex] : null
       "
       :idToUpdate="
-        formMode === 'edit' && currentList[activeRecordIndex]
-          ? currentList[activeRecordIndex].id
+        formMode === 'edit' && motionPictureList[activeRecordIndex]
+          ? motionPictureList[activeRecordIndex].id
           : null
       "
       @close-form="showForm = false"
       @save-form="
         (payload, id, successCallback) => saveForm(payload, id, successCallback)
       "
-      @delete-record="deleteRecord(activeRecordIndex)"
+      @delete-record="tryDeleteRecord(activeRecordIndex)"
     />
   </div>
+
 </template>
 
 <style scoped>
