@@ -48,7 +48,7 @@ function save() {
       errors.push("You must enter a release year.");
     }
     if (releaseYear.value.length !== 4 || !/[0-9]{4}/.test(releaseYear.value)) {
-      errors.push("Release year must consist of 4 numbers (e.g. 1994).");
+      errors.push("Release year must consist of 4 digits (e.g. 1994).");
     }
 
     formErrorList.value = errors;
@@ -81,7 +81,7 @@ function save() {
           type="text"
           class="form-control"
           id="nameControl"
-          placeholder="Enter title of movie"
+          placeholder="enter title of movie (max. 50 characters)"
         />
       </div>
 
@@ -92,7 +92,7 @@ function save() {
           v-model="description"
           class="form-control"
           id="descriptionControl"
-          placeholder="Enter a description for the movie"
+          placeholder="enter a description for the movie (max. 500 characters)"
         />
       </div>
 
@@ -106,7 +106,7 @@ function save() {
           type="text"
           class="form-control"
           id="releaseYearControl"
-          placeholder="Enter release year"
+          placeholder="enter release year"
         />
       </div>
 
