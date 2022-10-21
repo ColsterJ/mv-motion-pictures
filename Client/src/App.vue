@@ -127,8 +127,6 @@ async function actuallyDeleteRecord(record) {
       {{ notificationText }}
     </div>
 
-    <!-- "[{ active: isActive }, errorClass]" -->
-
     <MotionPictureTable
       :data="motionPictureList"
       :class="{ hidden: showForm }"

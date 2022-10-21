@@ -34,7 +34,7 @@ function sortBy(key) {
   <div id="mp-table">
     <div class="p-2 float-right">
       <button type="button" class="btn btn-primary" @click="$emit('add')">
-        + Add
+        <font-awesome-icon icon="fa-solid fa-circle-plus" /> Add
       </button>
     </div>
     <table class="table">
@@ -84,17 +84,17 @@ function sortBy(key) {
           <td>{{ item.description }}</td>
           <td>{{ item.releaseYear }}</td>
           <td>
-            <span class="clickable" @click="$emit('edit', item.originalIndex)"
-              >✏️</span
-            >
-            <span class="clickable" @click="$emit('copy', item.originalIndex)"
-              >📋</span
-            >
+            <span class="clickable m-2" @click="$emit('edit', item.originalIndex)">
+              <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+            </span>
+            <span class="clickable m-2" @click="$emit('copy', item.originalIndex)">
+              <font-awesome-icon icon="fa-solid fa-copy" />
+            </span>
             <span
-              class="clickable"
-              @click="$emit('delete-record', item.originalIndex)"
-              >🗑️</span
-            >
+              class="clickable m-2"
+              @click="$emit('delete-record', item.originalIndex)">
+              <font-awesome-icon icon="fa-solid fa-trash" />
+            </span>
           </td>
         </tr>
       </tbody>
