@@ -21,6 +21,9 @@ const notificationType = ref(null);
 watchEffect(async () => {
   if (refreshData.value === true) {
     await getAllRecords();
+    for(let [index, item] of motionPictureList.value.entries()) {
+      item.originalIndex = index;
+    }
   }
 });
 
