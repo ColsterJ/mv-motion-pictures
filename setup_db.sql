@@ -82,10 +82,10 @@ GO
 IF NOT EXISTS (SELECT name FROM sys.filegroups WHERE is_default=1 AND name = N'PRIMARY') ALTER DATABASE [motionpicturesdb] MODIFY FILEGROUP [PRIMARY] DEFAULT
 GO
 
-CREATE TABLE [dbo].[MotionPicture](
+CREATE TABLE [dbo].[MotionPictures](
 	[ID] [int] NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	[Name] [nvarchar](50) NOT NULL,
 	[Description] [nvarchar](500) NULL,
-	[ReleaseYear] [int] NOT NULL,
+	[Release Year] [int] NOT NULL,
 ) ON [PRIMARY]
 GO
