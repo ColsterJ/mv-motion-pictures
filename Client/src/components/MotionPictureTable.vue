@@ -40,9 +40,21 @@ function sortBy(key) {
     <table class="table">
       <thead>
         <tr>
-          <th scope="col" @click="sortBy('name')">Name</th>
-          <th scope="col" @click="sortBy('description')">Description</th>
-          <th scope="col" @click="sortBy('releaseYear')">Release Year</th>
+          <th class="clickable" scope="col" @click="sortBy('name')">
+            Name
+            {{ sortColumn === 'name' && sortOrder === 'desc' ? '&#129095;' : '' }}
+            {{ sortColumn === 'name' && sortOrder === 'asc' ? '&#129093;' : '' }}
+          </th>
+          <th class="clickable" scope="col" @click="sortBy('description')">
+            Description
+            {{ sortColumn === 'description' && sortOrder === 'desc' ? '&#129095;' : '' }}
+            {{ sortColumn === 'description' && sortOrder === 'asc' ? '&#129093;' : '' }}
+          </th>
+          <th class="clickable" scope="col" @click="sortBy('releaseYear')">
+            Release Year
+            {{ sortColumn === 'releaseYear' && sortOrder === 'desc' ? '&#129095;' : '' }}
+            {{ sortColumn === 'releaseYear' && sortOrder === 'asc' ? '&#129093;' : '' }}
+          </th>
           <th style="min-width: 120px" scope="col">Actions</th>
         </tr>
       </thead>
@@ -52,9 +64,9 @@ function sortBy(key) {
           <td>{{ item.description }}</td>
           <td>{{ item.releaseYear }}</td>
           <td>
-            <span class="mp-icon-btn" @click="$emit('edit', item.originalIndex)">✏️</span>
-            <span class="mp-icon-btn" @click="$emit('copy', item.originalIndex)">📋</span>
-            <span class="mp-icon-btn" @click="$emit('delete-record', item.originalIndex)"
+            <span class="clickable" @click="$emit('edit', item.originalIndex)">✏️</span>
+            <span class="clickable" @click="$emit('copy', item.originalIndex)">📋</span>
+            <span class="clickable" @click="$emit('delete-record', item.originalIndex)"
               >🗑️</span
             >
           </td>
@@ -68,7 +80,7 @@ function sortBy(key) {
 </template>
 
 <style scoped>
-.mp-icon-btn {
+.clickable {
   cursor: pointer;
   user-select: none;
 }
