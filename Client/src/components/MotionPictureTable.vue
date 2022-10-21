@@ -99,6 +99,11 @@ function sortBy(key) {
         </tr>
       </tbody>
     </table>
+    <div id="spinner-container">
+      <div v-if="isLoading" class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
     <h3 id="no-movies" v-if="data.length === 0 && !isLoading">
       There are currently no movies available.
     </h3>
@@ -112,5 +117,8 @@ function sortBy(key) {
 }
 #no-movies {
   text-align: center;
+}
+#spinner-container {
+  margin-left:  50%;
 }
 </style>
