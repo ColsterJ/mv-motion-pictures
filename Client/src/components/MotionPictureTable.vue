@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(["data"]);
+const props = defineProps(["data", "isLoading"]);
 const emits = defineEmits(["add", "edit", "copy", "delete-record"]);
 </script>
 
@@ -34,7 +34,7 @@ const emits = defineEmits(["add", "edit", "copy", "delete-record"]);
         </tr>
       </tbody>
     </table>
-    <h3 id="no-movies" v-if="data.length === 0">
+    <h3 id="no-movies" v-if="data.length === 0 && !isLoading">
       There are currently no movies available.
     </h3>
   </div>

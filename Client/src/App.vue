@@ -127,6 +127,7 @@ async function actuallyDeleteRecord(record) {
     <MotionPictureTable
       :data="motionPictureList"
       :class="{ hidden: showForm }"
+      :isLoading="refreshData === true"
       @add="openForm('add')"
       @edit="(index) => openForm('edit', index)"
       @copy="(index) => openForm('copy', index)"
