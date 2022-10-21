@@ -34,6 +34,9 @@ const emits = defineEmits(["add", "edit", "copy", "delete-record"]);
         </tr>
       </tbody>
     </table>
+    <h3 id="no-movies" v-if="data.length === 0">
+      There are currently no movies available.
+    </h3>
   </div>
 </template>
 
@@ -41,5 +44,8 @@ const emits = defineEmits(["add", "edit", "copy", "delete-record"]);
 .mp-icon-btn {
   cursor: pointer;
   user-select: none;
+}
+#no-movies {
+  text-align:  center;
 }
 </style>
