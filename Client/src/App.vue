@@ -21,7 +21,7 @@ const notificationType = ref(null);
 watchEffect(async () => {
   if (refreshData.value === true) {
     await getAllRecords();
-    for(let [index, item] of motionPictureList.value.entries()) {
+    for (let [index, item] of motionPictureList.value.entries()) {
       item.originalIndex = index;
     }
   }
@@ -33,7 +33,7 @@ watchEffect(() => {
     notificationText.value = null;
     notificationType.value = null;
   }
-})
+});
 
 function openForm(mode, editOrCopyIndex = null) {
   if (mode !== "add" && mode !== "edit" && mode !== "copy") {
@@ -51,23 +51,23 @@ async function saveForm(payload, id) {
     const response_ok = await api_put({ ...payload, id: id });
     if (response_ok) {
       notificationText.value = `'${payload.name}' has been updated successfully.`;
-      notificationType.value = 'success';
+      notificationType.value = "success";
       showForm.value = false;
       refreshData.value = true;
     } else {
       notificationText.value = `There was a problem updating '${payload.name}'. Please check your connection and try again.`;
-      notificationType.value = 'danger';
+      notificationType.value = "danger";
     }
   } else {
     const response_ok = await api_post(payload);
     if (response_ok) {
       notificationText.value = `'${payload.name}' has been saved successfully.`;
-      notificationType.value = 'success';
+      notificationType.value = "success";
       showForm.value = false;
       refreshData.value = true;
     } else {
       notificationText.value = `There was a problem saving '${payload.name}'. Please check your connection and try again.`;
-      notificationType.value = 'danger';
+      notificationType.value = "danger";
     }
   }
 }
@@ -76,7 +76,7 @@ async function getAllRecords() {
   const responseData = await api_getAll();
   if (responseData === null) {
     notificationText.value = `There was a problem retrieving the list of movies. Please check your connection and try again later.`;
-    notificationType.value = 'danger';
+    notificationType.value = "danger";
   } else {
     motionPictureList.value = responseData;
   }
@@ -98,13 +98,13 @@ async function actuallyDeleteRecord(record) {
   const response_ok = await api_delete(record.id);
   if (response_ok) {
     notificationText.value = `'${record.name}' has been deleted successfully.`;
-    notificationType.value = 'success';
+    notificationType.value = "success";
     showForm.value = false;
     activeRecordIndex.value = null;
     refreshData.value = true;
   } else {
     notificationText.value = `There was a problem deleting '${record.name}'. Please try again.`;
-    notificationType.value = 'danger';
+    notificationType.value = "danger";
   }
   recordToDelete.value = null;
   showDeleteConfirmation.value = false;
@@ -117,9 +117,11 @@ async function actuallyDeleteRecord(record) {
 
     <div
       v-if="notificationText"
-      :class="['alert',
-        {'alert-danger': notificationType === 'danger'},
-        {'alert-success': notificationType === 'success'}]"
+      :class="[
+        'alert',
+        { 'alert-danger': notificationType === 'danger' },
+        { 'alert-success': notificationType === 'success' },
+      ]"
       role="alert"
     >
       {{ notificationText }}
@@ -164,7 +166,6 @@ async function actuallyDeleteRecord(record) {
       @delete-record="tryDeleteRecord(activeRecordIndex)"
     />
   </div>
-
 </template>
 
 <style scoped>

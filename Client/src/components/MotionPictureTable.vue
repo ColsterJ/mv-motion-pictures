@@ -4,28 +4,28 @@ import { ref, computed } from "vue";
 const props = defineProps(["data", "isLoading"]);
 const emits = defineEmits(["add", "edit", "copy", "delete-record"]);
 
-const sortColumn = ref('releaseYear')
-const sortOrder = ref('desc')
+const sortColumn = ref("releaseYear");
+const sortOrder = ref("desc");
 const sortedData = computed(() => {
-  const key = sortColumn.value
-  let data = props.data
+  const key = sortColumn.value;
+  let data = props.data;
   if (key) {
-    const order = sortOrder.value === 'asc' ? 1 : -1;
+    const order = sortOrder.value === "asc" ? 1 : -1;
     data = data.slice().sort((a, b) => {
-      a = a[key]
-      b = b[key]
-      return (a === b ? 0 : a > b ? 1 : -1) * order
-    })
+      a = a[key];
+      b = b[key];
+      return (a === b ? 0 : a > b ? 1 : -1) * order;
+    });
     return data;
   }
-})
+});
 
 function sortBy(key) {
   sortColumn.value = key;
-  if (sortOrder.value === 'asc') {
-    sortOrder.value = 'desc';
+  if (sortOrder.value === "asc") {
+    sortOrder.value = "desc";
   } else {
-    sortOrder.value = 'asc';
+    sortOrder.value = "asc";
   }
 }
 </script>
@@ -42,18 +42,38 @@ function sortBy(key) {
         <tr>
           <th class="clickable" scope="col" @click="sortBy('name')">
             Name
-            {{ sortColumn === 'name' && sortOrder === 'desc' ? '&#129095;' : '' }}
-            {{ sortColumn === 'name' && sortOrder === 'asc' ? '&#129093;' : '' }}
+            {{
+              sortColumn === "name" && sortOrder === "desc" ? "&#129095;" : ""
+            }}
+            {{
+              sortColumn === "name" && sortOrder === "asc" ? "&#129093;" : ""
+            }}
           </th>
           <th class="clickable" scope="col" @click="sortBy('description')">
             Description
-            {{ sortColumn === 'description' && sortOrder === 'desc' ? '&#129095;' : '' }}
-            {{ sortColumn === 'description' && sortOrder === 'asc' ? '&#129093;' : '' }}
+            {{
+              sortColumn === "description" && sortOrder === "desc"
+                ? "&#129095;"
+                : ""
+            }}
+            {{
+              sortColumn === "description" && sortOrder === "asc"
+                ? "&#129093;"
+                : ""
+            }}
           </th>
           <th class="clickable" scope="col" @click="sortBy('releaseYear')">
             Release Year
-            {{ sortColumn === 'releaseYear' && sortOrder === 'desc' ? '&#129095;' : '' }}
-            {{ sortColumn === 'releaseYear' && sortOrder === 'asc' ? '&#129093;' : '' }}
+            {{
+              sortColumn === "releaseYear" && sortOrder === "desc"
+                ? "&#129095;"
+                : ""
+            }}
+            {{
+              sortColumn === "releaseYear" && sortOrder === "asc"
+                ? "&#129093;"
+                : ""
+            }}
           </th>
           <th style="min-width: 120px" scope="col">Actions</th>
         </tr>
@@ -64,9 +84,15 @@ function sortBy(key) {
           <td>{{ item.description }}</td>
           <td>{{ item.releaseYear }}</td>
           <td>
-            <span class="clickable" @click="$emit('edit', item.originalIndex)">✏️</span>
-            <span class="clickable" @click="$emit('copy', item.originalIndex)">📋</span>
-            <span class="clickable" @click="$emit('delete-record', item.originalIndex)"
+            <span class="clickable" @click="$emit('edit', item.originalIndex)"
+              >✏️</span
+            >
+            <span class="clickable" @click="$emit('copy', item.originalIndex)"
+              >📋</span
+            >
+            <span
+              class="clickable"
+              @click="$emit('delete-record', item.originalIndex)"
               >🗑️</span
             >
           </td>
@@ -85,6 +111,6 @@ function sortBy(key) {
   user-select: none;
 }
 #no-movies {
-  text-align:  center;
+  text-align: center;
 }
 </style>
